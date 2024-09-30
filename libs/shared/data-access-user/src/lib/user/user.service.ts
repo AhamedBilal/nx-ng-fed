@@ -6,6 +6,10 @@ export class UserService {
   private isUserLoggedIn = new BehaviorSubject(false);
   isUserLoggedIn$ = this.isUserLoggedIn.asObservable();
 
+  constructor() {
+    console.log('UserService created');
+  }
+
   checkCredentials(username: string, password: string) {
     if (username === 'demo' && password === 'demo') {
       this.isUserLoggedIn.next(true);

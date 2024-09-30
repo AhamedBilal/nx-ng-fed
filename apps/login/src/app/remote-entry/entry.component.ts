@@ -1,11 +1,13 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '@ng-mf/data-access-user';
+import { UserService } from '@ng-mf/data-access-user/user';
+import { DataStoreService } from '@ng-mf/data-access-user/data-store';
+import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   selector: 'ng-mf-login-entry',
   template: `
     <div class="login-app">
@@ -19,6 +21,7 @@ import { UserService } from '@ng-mf/data-access-user';
           <input type="password" name="password" [(ngModel)]="password" />
         </label>
         <button type="submit">Login</button>
+        <button type="button" routerLink="/todo">Login</button>
       </form>
       <div *ngIf="isLoggedIn$ | async">User is logged in!</div>
     </div>
@@ -31,6 +34,7 @@ import { UserService } from '@ng-mf/data-access-user';
         padding: 8px;
         margin: 0 auto;
       }
+
       .login-form {
         display: flex;
         align-items: center;
@@ -38,18 +42,20 @@ import { UserService } from '@ng-mf/data-access-user';
         margin: 0 auto;
         padding: 8px;
       }
+
       label {
         display: block;
       }
-    `,
-  ],
+    `
+  ]
 })
 export class RemoteEntryComponent {
   username = '';
   password = '';
   isLoggedIn$ = this.userService.isUserLoggedIn$;
 
-  constructor(private userService: UserService) {}
+  constructor(private userService: UserService, private dataStoreService: DataStoreService) {
+  }
 
   login() {
     this.userService.checkCredentials(this.username, this.password);
